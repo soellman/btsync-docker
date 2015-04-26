@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # magically renumber the default user
-sed -i "s|default:x:1000:1000:|default:x:$USERID:$GROUPID:" /etc/passwd
-sed -i "s|default:x:1000:|default:x:$GROUPID:" /etc/group
+sed -i "s|default:x:1000:1000:|default:x:$USERID:$GROUPID:|" /etc/passwd
+sed -i "s|default:x:1000:|default:x:$GROUPID:|" /etc/group
 
 # provide a nice default
 if [ ! -f /config/btsync.conf ]; then
@@ -22,7 +22,7 @@ EOF
 fi
 
 mkdir -p /config/.sync
-chown -R $USERID:$GROUPID /config
+chown -R default:default /config
 
-exec gosu $USERID:$GROUPID \
+exec gosu default:default \
   /opt/btsync/btsync --nodaemon --config /config/btsync.conf --log /config/btsync.log
