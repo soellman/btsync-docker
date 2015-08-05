@@ -1,15 +1,15 @@
-FROM progrium/busybox
+FROM slintes/alpine-glibc
 MAINTAINER Oliver Soell <oliver@soell.net>
 
-# use progrium/busybox since it supports glibc
+# use slintes/alpine-glibc since it supports glibc
 
-RUN opkg-install ca-certificates curl tar && \
+RUN apk --update add tar && \
     curl -o /usr/bin/gosu -sSL "https://github.com/tianon/gosu/releases/download/1.4/gosu-amd64" && \
     chmod +x /usr/bin/gosu && \
     mkdir -p /opt/btsync && \
     curl -s -k -L "https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz" | tar -xzf - -C /opt/btsync && \
-    opkg-cl remove ca-certificates curl tar && \
-    rm -rf /var/opkg-lists
+    apk del tar && \
+    rm -rf /var/cache/apk/*
 
 ADD /start.sh /start.sh
 

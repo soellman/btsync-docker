@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# magically renumber the default user
-sed -i "s|default:x:1000:1000:|default:x:$USERID:$GROUPID:|" /etc/passwd
-sed -i "s|default:x:1000:|default:x:$GROUPID:|" /etc/group
+# magically renumber the nobody user
+sed -i "s|nobody:x:65534:65534:|nobody:x:$USERID:$GROUPID:|" /etc/passwd
+sed -i "s|nobody:x:65534:|nobody:x:$GROUPID:|" /etc/group
 
-# provide a nice default
+# provide a nice nobody
 if [ ! -f /config/btsync.conf ]; then
 cat << EOF > "/config/btsync.conf"
 {
@@ -22,7 +22,7 @@ EOF
 fi
 
 mkdir -p /config/.sync
-chown -R default:default /config
+chown -R nobody:nobody /config
 
-exec gosu default:default \
+exec gosu nobody:nobody \
   /opt/btsync/btsync --nodaemon --config /config/btsync.conf --log /config/btsync.log
